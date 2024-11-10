@@ -1,0 +1,47 @@
+version: '3.3'
+
+services:
+  mysql-db:
+    image: mysql:9
+    volumes:
+      - deploy_data:/var/lib/mysql
+    environment:
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      interval: 1m
+      timeout: 20s
+      retries: 10
+    networks:
+      - custom-network
+
+  spring-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "8080:8080"
+    networks:
+      - custom-network
+
+networks:
+  custom-network:
+    driver: bridge
+
+volumes:
+  deploy_data:
