@@ -49,5 +49,5 @@ jobs:
       run: >
         aws deploy create-deployment --application-name GitCD 
         --deployment-config-name CodeDeployDefault.AllAtOnce
-        --deployment-group-name CodeDeployGitHubDemo-DepGrp
+        --deployment-group-name GidCD-grp 
         --s3-location bucket=jar-deploy-bucket,bundleType=zip,key=deploy-jar.zip
