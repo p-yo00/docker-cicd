@@ -8,6 +8,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      MYSQL_HOST: test
+      MYSQL_USERNAME: test
+      MYSQL_PASSWORD: test
     permissions:
       contents: read
 
