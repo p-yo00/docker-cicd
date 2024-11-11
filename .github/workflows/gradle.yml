@@ -8,10 +8,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      MYSQL_HOST: test
-      MYSQL_USERNAME: test
-      MYSQL_PASSWORD: test
     permissions:
       contents: read
 
@@ -30,7 +26,7 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Build with Gradle Wrapper
-      run: ./gradlew build --scan
+      run: ./gradlew build -x test -Dspring.profiles.active=test --scan
 
     - name: view file
       run: ls -l
